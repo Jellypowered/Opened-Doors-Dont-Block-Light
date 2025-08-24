@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <ODBL_enableDynamicLighting_desc>When enabled, lighting updates in real-time as doors open and close, allowing light to pass through open doors dynamically.</ODBL_enableDynamicLighting_desc>
+  <ODBL_enableDynamicLighting_label>Enable dynamic lighting</ODBL_enableDynamicLighting_label>
+  <ODBL_disableDynamicLighting_label>Only update lighting when doors open and close</ODBL_disableDynamicLighting_label>
+  <ODBL_updateInterval_desc>The number of ticks between light updates while doors are opening/closing. Lower is smoother but may impact performance.</ODBL_updateInterval_desc>
+  <ODBL_updateInterval_label>Update interval</ODBL_updateInterval_label>
+  <ODBL_resetDefaults_button>reset to defaults</ODBL_resetDefaults_button>
+</LanguageData>

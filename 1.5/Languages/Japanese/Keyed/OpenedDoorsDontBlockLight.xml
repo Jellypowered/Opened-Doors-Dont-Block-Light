@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+    <ODBL_enableDynamicLighting_label>リアルタイム更新</ODBL_enableDynamicLighting_label>
+    <ODBL_disableDynamicLighting_label>ドアの開閉時のみ更新</ODBL_disableDynamicLighting_label>
+    <ODBL_updateInterval_label>更新間隔</ODBL_updateInterval_label>
+
+    <ODBL_enableDynamicLighting_desc>有効にすると、ドアの開閉に応じて照明がリアルタイムで更新され、開いたドアを光が通過できるようになります。</ODBL_enableDynamicLighting_desc>
+    <ODBL_updateInterval_desc>ドアが開閉している間に照明を更新するティック数の間隔。数値を小さくすると動作が滑らかになりますが、パフォーマンスに影響を与える可能性があります。</ODBL_updateInterval_desc>
+</LanguageData>
