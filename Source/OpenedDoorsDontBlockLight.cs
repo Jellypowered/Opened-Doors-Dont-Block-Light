@@ -18,9 +18,12 @@ namespace OpenedDoorsDontBlockLight
             var glow = __instance.Map?.glowGrid;
             if (glow == null) return;
 
-            // Open doors don't block light
-            glow.LightBlockerRemoved(__instance.Position);
-            glow.DirtyCell(__instance.Position);
+            // Open doors don't block light on ANY of their cells
+            foreach (var c in Utility.DoorCells.Cells(__instance))
+            {
+                glow.LightBlockerRemoved(c);
+                glow.DirtyCell(c);
+            }
 
             // Optional: keep updating while animating
             if (OpenedDoorsDontBlockLightMod.Settings.enableDynamicLighting)
@@ -36,9 +39,12 @@ namespace OpenedDoorsDontBlockLight
             var glow = __instance.Map?.glowGrid;
             if (glow == null) return;
 
-            // Closed doors block light
-            glow.LightBlockerAdded(__instance.Position);
-            glow.DirtyCell(__instance.Position);
+            // Closed doors block light on ALL occupied cells
+            foreach (var c in Utility.DoorCells.Cells(__instance))
+            {
+                glow.LightBlockerAdded(c);
+                glow.DirtyCell(c);
+            }
 
             // Optional: keep updating while animating
             if (OpenedDoorsDontBlockLightMod.Settings.enableDynamicLighting)
@@ -58,22 +64,32 @@ namespace OpenedDoorsDontBlockLight
                 if (glow == null) return;
 
                 if (__instance.Open)
-                    glow.LightBlockerRemoved(__instance.Position);
+                {
+                    foreach (var c in Utility.DoorCells.Cells(__instance))
+                    {
+                        glow.LightBlockerRemoved(c);
+                        glow.DirtyCell(c);
+                    }
+                }
                 else
-                    glow.LightBlockerAdded(__instance.Position);
+                {
+                    foreach (var c in Utility.DoorCells.Cells(__instance))
+                    {
+                        glow.LightBlockerAdded(c);
+                        glow.DirtyCell(c);
+                    }
+                }
 
-                glow.DirtyCell(__instance.Position);
-
-                // Optional: start tracking if it's moving right now
                 if (OpenedDoorsDontBlockLightMod.Settings.enableDynamicLighting && __instance.IsMoving())
                     DoorGlowGridManager.instance?.Add(__instance);
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 Log.Error("[ODBL] SpawnSetup postfix failed: " + e);
             }
         }
     }
+
 
     // ---------------------------
     // NO GlowGrid postfix anymore
@@ -109,7 +125,11 @@ namespace OpenedDoorsDontBlockLight
 
                 var glow = door.Map?.glowGrid;
                 if (glow != null)
-                    glow.DirtyCell(door.Position);
+                {
+                    // Dirty every occupied cell, not just Position
+                    foreach (var c in Utility.DoorCells.Cells(door))
+                        glow.DirtyCell(c);
+                }
 
                 if (!door.IsMoving())
                     movingDoors.RemoveAt(i);
@@ -145,6 +165,15 @@ namespace OpenedDoorsDontBlockLight
             int visualTicksOpen = door.Get_ticksSinceOpen();
             if (!door.Open) return visualTicksOpen > 0;
             return visualTicksOpen < door.TicksToOpenNow;
+        }
+
+        internal static class DoorCells
+        {
+            public static IEnumerable<IntVec3> Cells(Building_Door door)
+            {
+                if (door == null || !door.Spawned) yield break;
+                foreach (var c in GenAdj.CellsOccupiedBy(door)) yield return c;
+            }
         }
     }
 }
